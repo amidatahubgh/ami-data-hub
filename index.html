@@ -8,7 +8,7 @@
   <title>Ami Data Hub | Affordable MTN Data Bundles</title>
   <meta
     name="description"
-    content="Buy affordable MTN data bundles in Ghana. Send MoMo first, then submit your order on WhatsApp."
+    content="Buy affordable MTN data bundles in Ghana. Pay securely and complete your MTN data order online."
   />
   <style>
     :root{
@@ -188,8 +188,8 @@
       border:1px solid var(--line);
     }
 
-    .btn-disabled{
-      opacity:0.55;
+    .btn[disabled]{
+      opacity:0.65;
       cursor:not-allowed;
     }
 
@@ -335,13 +335,6 @@
       font-size:17px;
     }
 
-    .copy-row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:12px;
-    }
-
     .instruction-list{
       display:grid;
       gap:14px;
@@ -449,21 +442,13 @@
       font-size:14px;
     }
 
-    .hidden{ display:none; }
-
-    .checkbox-row{
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      padding:14px;
+    .status-note{
+      padding:14px 16px;
       border-radius:14px;
-      border:1px solid var(--line);
       background:rgba(255,255,255,0.03);
-    }
-
-    .checkbox-row input{
-      margin-top:4px;
-      transform:scale(1.2);
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:14px;
     }
 
     footer{
@@ -526,16 +511,20 @@
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-card">
-          <div class="eyebrow">✅ Send MoMo first • 📱 Then WhatsApp your order • ⚡ Fast response</div>
-          <h1>Send payment first, then submit your MTN data order</h1>
+          <div class="eyebrow">✅ Secure checkout • 📱 Fast response • ⚡ MTN bundle orders</div>
+          <h1>Pay securely and place your MTN data order online</h1>
           <p>
-            This website uses a safe manual process. Customers send Mobile Money to
-            <strong>Gadese Charity Ami</strong> first, then submit the order on WhatsApp for confirmation and delivery.
+            Enter your details, choose your MTN bundle, and continue to secure checkout.
+            Your order will be processed after successful payment confirmation.
           </p>
 
           <div class="hero-actions">
             <a href="#order" class="btn btn-primary">Start Order</a>
             <a href="https://wa.me/233535296779" target="_blank" class="btn btn-secondary">Open WhatsApp</a>
+          </div>
+
+          <div class="success-note">
+            You are currently using a payment flow connected to your backend. Keep testing in Paystack test mode until everything is working correctly.
           </div>
         </div>
 
@@ -558,7 +547,7 @@
 
           <div class="stat">
             <div>
-              <div class="stat-label">WhatsApp / MoMo</div>
+              <div class="stat-label">Support WhatsApp</div>
               <div class="stat-value">0535296779</div>
             </div>
             <div>📲</div>
@@ -579,18 +568,23 @@
       <div class="container">
         <h2 class="section-title">Place your order</h2>
         <p class="section-sub">
-          Fill the form, send the MoMo payment, then send the prepared WhatsApp message.
+          Fill in your details and continue to checkout.
         </p>
 
         <div class="order-layout">
           <div class="panel">
             <h3>Order Form</h3>
-            <p>The WhatsApp button stays locked until the payment checkbox is ticked.</p>
+            <p>Choose your bundle and proceed to payment.</p>
 
             <div class="form-grid">
               <div class="field">
                 <label for="customerName">Your Name</label>
                 <input type="text" id="customerName" placeholder="Enter your full name" />
+              </div>
+
+              <div class="field">
+                <label for="customerEmail">Email Address</label>
+                <input type="email" id="customerEmail" placeholder="Enter your email address" />
               </div>
 
               <div class="field">
@@ -627,30 +621,8 @@
                   <div class="price-value" id="selectedPrice">₵5</div>
                 </div>
                 <div class="mini-note">
-                  First send exactly this amount by MoMo before you submit your order.
+                  You will be redirected to secure checkout after clicking the payment button.
                 </div>
-              </div>
-
-              <button class="btn btn-dark" type="button" onclick="showPaymentStep()">
-                Step 1 — Send MoMo First
-              </button>
-
-              <div id="paymentStepBox" class="payment-card hidden">
-                <strong>Send Payment To:</strong>
-                <div>Name: Gadese Charity Ami</div>
-                <div>Network: MTN MoMo</div>
-                <div>Number: <b id="momoNumberText">0535296779</b></div>
-                <div style="margin-top:8px;">Amount: <b id="paymentAmountText">₵5</b></div>
-
-                <div class="copy-row">
-                  <button class="btn btn-secondary" type="button" onclick="copyMomoNumber()">Copy MoMo Number</button>
-                  <button class="btn btn-secondary" type="button" onclick="copyAmount()">Copy Amount</button>
-                </div>
-              </div>
-
-              <div class="field">
-                <label for="paymentRef">MoMo Reference / Sender Name (Optional)</label>
-                <input type="text" id="paymentRef" placeholder="Optional payment reference" />
               </div>
 
               <div class="field">
@@ -658,65 +630,63 @@
                 <textarea id="extraNote" rows="4" placeholder="Any extra note..."></textarea>
               </div>
 
-              <label class="checkbox-row">
-                <input type="checkbox" id="paidCheck" onchange="toggleWhatsAppButton()" />
-                <span>I have already sent the MoMo payment to Gadese Charity Ami.</span>
-              </label>
-
-              <button id="whatsappBtn" class="btn btn-primary btn-disabled" type="button" onclick="sendWhatsAppOrder()" disabled>
-                Step 2 — Send Order on WhatsApp
+              <button id="payBtn" class="btn btn-primary" type="button" onclick="startPayment()">
+                Pay Now
               </button>
 
+              <div id="paymentStatus" class="status-note">
+                Waiting for your order details.
+              </div>
+
               <div class="warning">
-                This site cannot automatically confirm MoMo payment. The checkbox is only a customer confirmation step before WhatsApp opens.
+                Please double-check the recipient phone number before continuing. Wrong numbers entered by customers may lead to failed delivery.
               </div>
             </div>
           </div>
 
           <div class="panel">
             <h3>How it works</h3>
-            <p>Follow these steps in order.</p>
+            <p>Follow these simple steps.</p>
 
             <div class="instruction-list">
               <div class="instruction">
                 <div class="instruction-num">1</div>
                 <div>
-                  <strong>Choose your bundle</strong><br />
-                  Select the MTN data bundle you want.
+                  <strong>Fill your details</strong><br />
+                  Enter your name, email, recipient number, and selected MTN bundle.
                 </div>
               </div>
 
               <div class="instruction">
                 <div class="instruction-num">2</div>
                 <div>
-                  <strong>Tap “Send MoMo First”</strong><br />
-                  The payment details and exact amount will appear.
+                  <strong>Click Pay Now</strong><br />
+                  Your order is sent to the backend and a secure Paystack checkout session is created.
                 </div>
               </div>
 
               <div class="instruction">
                 <div class="instruction-num">3</div>
                 <div>
-                  <strong>Send payment</strong><br />
-                  Transfer the exact amount to the MoMo number shown.
+                  <strong>Complete payment</strong><br />
+                  Pay on the Paystack checkout page using the available payment options.
                 </div>
               </div>
 
               <div class="instruction">
                 <div class="instruction-num">4</div>
                 <div>
-                  <strong>Tick the payment checkbox</strong><br />
-                  After payment, confirm that you have sent it.
+                  <strong>Order processing</strong><br />
+                  After successful payment confirmation, your order can be processed.
                 </div>
               </div>
+            </div>
 
-              <div class="instruction">
-                <div class="instruction-num">5</div>
-                <div>
-                  <strong>Send WhatsApp order</strong><br />
-                  WhatsApp opens with your prepared order message.
-                </div>
-              </div>
+            <div class="payment-card">
+              <strong>Support Contact</strong>
+              <div>Name: Gadese Charity Ami</div>
+              <div>WhatsApp: 0535296779</div>
+              <div>Network: MTN Ghana</div>
             </div>
 
             <div class="support-box">
@@ -728,7 +698,7 @@
             </div>
 
             <div class="success-note" style="margin-top:16px;">
-              Orders are processed after payment confirmation. Please double-check the recipient phone number before sending.
+              For now, keep testing with your Paystack test setup until every step works well.
             </div>
           </div>
         </div>
@@ -738,25 +708,25 @@
     <section class="section" id="why-us">
       <div class="container">
         <h2 class="section-title">Why this method is better</h2>
-        <p class="section-sub">It protects your business from unfunded orders.</p>
+        <p class="section-sub">It creates a cleaner and more professional checkout flow.</p>
 
         <div class="features">
           <div class="feature">
-            <div class="feature-icon">💰</div>
-            <h4>Payment First</h4>
-            <p>Customers are guided to send MoMo before the order message is submitted.</p>
+            <div class="feature-icon">💳</div>
+            <h4>Secure Checkout</h4>
+            <p>Customers are redirected to Paystack for payment instead of relying only on manual confirmation.</p>
           </div>
 
           <div class="feature">
-            <div class="feature-icon">🛡️</div>
-            <h4>Low Risk</h4>
-            <p>You avoid spending your own money before customers have paid.</p>
+            <div class="feature-icon">⚡</div>
+            <h4>Fast Flow</h4>
+            <p>The site prepares the order instantly and redirects the customer into payment.</p>
           </div>
 
           <div class="feature">
-            <div class="feature-icon">📲</div>
-            <h4>Simple WhatsApp Confirmation</h4>
-            <p>The final order still reaches your sister directly on WhatsApp.</p>
+            <div class="feature-icon">📦</div>
+            <h4>Cleaner Orders</h4>
+            <p>Your backend receives structured order details, which is better for future automation and tracking.</p>
           </div>
         </div>
       </div>
@@ -769,13 +739,13 @@
 
         <div class="faq">
           <div class="faq-item">
-            <h4>Do I pay before WhatsApp?</h4>
-            <p>Yes. First send MoMo, then tick the payment checkbox, then send the WhatsApp order.</p>
+            <h4>How do I order?</h4>
+            <p>Fill the form, click Pay Now, and complete payment on the secure checkout page.</p>
           </div>
 
           <div class="faq-item">
-            <h4>Does the website verify my MoMo payment automatically?</h4>
-            <p>No. Payment is confirmed manually after you send the WhatsApp order.</p>
+            <h4>Do I need WhatsApp to pay?</h4>
+            <p>No. WhatsApp is only for support now. Payment starts directly from the order form.</p>
           </div>
 
           <div class="faq-item">
@@ -785,7 +755,7 @@
 
           <div class="faq-item">
             <h4>How long does delivery take?</h4>
-            <p>Orders are processed after payment confirmation, depending on network conditions and order volume.</p>
+            <p>Orders are processed after successful payment confirmation, depending on network conditions and order volume.</p>
           </div>
         </div>
       </div>
@@ -800,19 +770,19 @@
       </div>
       <div>
         Owner: Gadese Charity Ami<br />
-        WhatsApp / MoMo: 0535296779
+        Support WhatsApp: 0535296779
       </div>
     </div>
   </footer>
 
   <script>
+    const BACKEND_URL = "https://ami-data-backend.proud-fog-38e9.workers.dev";
+
     const bundleSelect = document.getElementById("bundleSelect");
     const selectedPrice = document.getElementById("selectedPrice");
     const selectedBundleText = document.getElementById("selectedBundleText");
-    const paymentAmountText = document.getElementById("paymentAmountText");
-    const paymentStepBox = document.getElementById("paymentStepBox");
-    const paidCheck = document.getElementById("paidCheck");
-    const whatsappBtn = document.getElementById("whatsappBtn");
+    const payBtn = document.getElementById("payBtn");
+    const paymentStatus = document.getElementById("paymentStatus");
 
     function updateBundleDisplay() {
       const option = bundleSelect.options[bundleSelect.selectedIndex];
@@ -821,65 +791,25 @@
 
       selectedBundleText.textContent = "MTN " + bundleName;
       selectedPrice.textContent = "₵" + price;
-      paymentAmountText.textContent = "₵" + price;
     }
 
-    function showPaymentStep() {
+    async function startPayment() {
       const customerName = document.getElementById("customerName").value.trim();
+      const customerEmail = document.getElementById("customerEmail").value.trim();
       const recipientNumber = document.getElementById("recipientNumber").value.trim();
-
-      if (!customerName) {
-        alert("Please enter your name first.");
-        return;
-      }
-
-      if (!recipientNumber) {
-        alert("Please enter the recipient phone number first.");
-        return;
-      }
-
-      updateBundleDisplay();
-      paymentStepBox.classList.remove("hidden");
-      paymentStepBox.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-
-    function copyMomoNumber() {
-      navigator.clipboard.writeText("0535296779")
-        .then(() => alert("MoMo number copied."))
-        .catch(() => alert("Could not copy automatically. Please copy the number manually."));
-    }
-
-    function copyAmount() {
-      const option = bundleSelect.options[bundleSelect.selectedIndex];
-      const price = option.dataset.price;
-
-      navigator.clipboard.writeText(price)
-        .then(() => alert("Amount copied."))
-        .catch(() => alert("Could not copy automatically. Please copy the amount manually."));
-    }
-
-    function toggleWhatsAppButton() {
-      if (paidCheck.checked) {
-        whatsappBtn.disabled = false;
-        whatsappBtn.classList.remove("btn-disabled");
-      } else {
-        whatsappBtn.disabled = true;
-        whatsappBtn.classList.add("btn-disabled");
-      }
-    }
-
-    function sendWhatsAppOrder() {
-      const customerName = document.getElementById("customerName").value.trim();
-      const recipientNumber = document.getElementById("recipientNumber").value.trim();
-      const paymentRef = document.getElementById("paymentRef").value.trim();
       const extraNote = document.getElementById("extraNote").value.trim();
 
       const option = bundleSelect.options[bundleSelect.selectedIndex];
       const bundleName = option.value;
-      const price = option.dataset.price;
+      const price = Number(option.dataset.price);
 
       if (!customerName) {
         alert("Please enter your name.");
+        return;
+      }
+
+      if (!customerEmail) {
+        alert("Please enter your email address.");
         return;
       }
 
@@ -888,45 +818,49 @@
         return;
       }
 
-      if (!paidCheck.checked) {
-        alert("Please confirm that you have sent the payment first.");
-        return;
+      payBtn.disabled = true;
+      payBtn.textContent = "Processing...";
+      paymentStatus.textContent = "Initializing secure payment...";
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/initialize-payment`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: customerEmail,
+            amount: price,
+            customerName,
+            recipientNumber,
+            bundle: `MTN ${bundleName}`,
+            extraNote
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.status && data.data && data.data.authorization_url) {
+          paymentStatus.textContent = "Redirecting to secure checkout...";
+          window.location.href = data.data.authorization_url;
+          return;
+        }
+
+        console.error("Payment initialization error:", data);
+        paymentStatus.textContent = "Could not initialize payment.";
+        alert(data.message || data.error || "Payment initialization failed.");
+      } catch (error) {
+        console.error("Network/payment error:", error);
+        paymentStatus.textContent = "A network error occurred.";
+        alert("A network error occurred while starting payment.");
+      } finally {
+        payBtn.disabled = false;
+        payBtn.textContent = "Pay Now";
       }
-
-      const whatsappNumber = "233535296779";
-
-      let message =
-`Hello Ami Data Hub,
-
-I have already sent payment and I want to buy data.
-
-Name: ${customerName}
-Bundle: MTN ${bundleName}
-Price: ₵${price}
-Recipient Phone Number: ${recipientNumber}
-Payment Sent: Yes`;
-
-      if (paymentRef) {
-        message += `\nMoMo Reference / Sender Name: ${paymentRef}`;
-      }
-
-      if (extraNote) {
-        message += `\nExtra Note: ${extraNote}`;
-      }
-
-      message += `
-
-Please confirm my payment and process my order.`;
-
-      const encodedMessage = encodeURIComponent(message);
-      const url = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-
-      window.open(url, "_blank");
     }
 
     bundleSelect.addEventListener("change", updateBundleDisplay);
     updateBundleDisplay();
-    toggleWhatsAppButton();
   </script>
 </body>
 </html>
