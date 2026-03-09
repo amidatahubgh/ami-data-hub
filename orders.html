@@ -91,6 +91,12 @@
       border:1px solid var(--line);
     }
 
+    .btn-danger{
+      background:rgba(239,68,68,0.10);
+      color:#fecaca;
+      border:1px solid rgba(239,68,68,0.18);
+    }
+
     .stats{
       display:grid;
       grid-template-columns:repeat(4, 1fr);
@@ -151,7 +157,8 @@
       width:100%;
     }
 
-    .search-box input{
+    .search-box input,
+    .password-box input{
       width:100%;
       padding:12px 14px;
       border-radius:14px;
@@ -162,7 +169,8 @@
       font-size:14px;
     }
 
-    .search-box input::placeholder{
+    .search-box input::placeholder,
+    .password-box input::placeholder{
       color:#94a3b8;
     }
 
@@ -235,6 +243,63 @@
       font-size:14px;
     }
 
+    .lock-screen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .lock-card{
+      width:min(460px, 100%);
+      background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:28px;
+      text-align:center;
+    }
+
+    .lock-icon{
+      width:82px;
+      height:82px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      margin:0 auto 18px;
+      font-size:36px;
+      background:rgba(34,197,94,0.10);
+      border:1px solid rgba(34,197,94,0.18);
+    }
+
+    .lock-card h1{
+      font-size:30px;
+      margin-bottom:10px;
+    }
+
+    .lock-card p{
+      color:var(--muted);
+      margin-bottom:18px;
+      line-height:1.6;
+    }
+
+    .password-box{
+      display:grid;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .error-text{
+      color:#fecaca;
+      font-size:14px;
+      min-height:20px;
+    }
+
+    .hidden{
+      display:none;
+    }
+
     @media (max-width: 900px){
       .stats{
         grid-template-columns:repeat(2, 1fr);
@@ -246,7 +311,8 @@
         grid-template-columns:1fr;
       }
 
-      .title h1{
+      .title h1,
+      .lock-card h1{
         font-size:26px;
       }
 
@@ -261,82 +327,108 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="topbar">
-      <div class="title">
-        <h1>Ami Data Hub Orders</h1>
-        <p>View paid orders saved from your payment system.</p>
-      </div>
 
-      <div class="actions">
-        <button class="btn btn-primary" onclick="loadOrders()">Refresh Orders</button>
-        <a class="btn btn-secondary" href="./">Back to Home</a>
+  <div id="lockScreen" class="lock-screen">
+    <div class="lock-card">
+      <div class="lock-icon">🔒</div>
+      <h1>Orders Dashboard</h1>
+      <p>Enter the dashboard password to view Ami Data Hub paid orders.</p>
+
+      <div class="password-box">
+        <input type="password" id="dashboardPassword" placeholder="Enter dashboard password" />
+        <button class="btn btn-primary" onclick="unlockDashboard()">Unlock Dashboard</button>
+        <div class="error-text" id="passwordError"></div>
       </div>
     </div>
+  </div>
 
-    <div class="stats">
-      <div class="stat-card">
-        <div class="stat-label">Total Orders</div>
-        <div class="stat-value" id="totalOrders">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Successful Payments</div>
-        <div class="stat-value" id="successfulOrders">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Total Revenue</div>
-        <div class="stat-value" id="totalRevenue">GHS 0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Latest Bundle</div>
-        <div class="stat-value" id="latestBundle">—</div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-head">
-        <div>
-          <h2>Orders Table</h2>
-          <p>Newest orders appear first.</p>
+  <div id="dashboardContent" class="hidden">
+    <div class="container">
+      <div class="topbar">
+        <div class="title">
+          <h1>Ami Data Hub Orders</h1>
+          <p>View paid orders saved from your payment system.</p>
         </div>
 
-        <div class="search-box">
-          <input type="text" id="searchInput" placeholder="Search by name, number, bundle, email..." />
+        <div class="actions">
+          <button class="btn btn-primary" onclick="loadOrders()">Refresh Orders</button>
+          <button class="btn btn-danger" onclick="logoutDashboard()">Lock Dashboard</button>
+          <a class="btn btn-secondary" href="./">Back to Home</a>
         </div>
       </div>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Customer Name</th>
-              <th>Email</th>
-              <th>Recipient Number</th>
-              <th>Bundle</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Reference</th>
-              <th>Created At</th>
-              <th>Extra Note</th>
-            </tr>
-          </thead>
-          <tbody id="ordersTableBody">
-            <tr>
-              <td colspan="10" class="empty">Loading orders...</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-label">Total Orders</div>
+          <div class="stat-value" id="totalOrders">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Successful Payments</div>
+          <div class="stat-value" id="successfulOrders">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-value" id="totalRevenue">GHS 0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Latest Bundle</div>
+          <div class="stat-value" id="latestBundle">—</div>
+        </div>
       </div>
-    </div>
 
-    <div class="note">
-      This page reads from your backend orders endpoint. For production, the next improvement will be adding login protection so only your sister can open this dashboard.
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Orders Table</h2>
+            <p>Newest orders appear first.</p>
+          </div>
+
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by name, number, bundle, email..." />
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Customer Name</th>
+                <th>Email</th>
+                <th>Recipient Number</th>
+                <th>Bundle</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Reference</th>
+                <th>Created At</th>
+                <th>Extra Note</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <tr>
+                <td colspan="10" class="empty">Loading orders...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="note">
+        This is a simple browser password gate. It helps hide the page, but it is not strong security. The stronger next upgrade is backend token protection.
+      </div>
     </div>
   </div>
 
   <script>
     const BACKEND_URL = "https://ami-data-backend.proud-fog-38e9.workers.dev";
+
+    // CHANGE THIS PASSWORD TO YOUR OWN
+    const DASHBOARD_PASSWORD = "AmiOrders2026";
+
+    const lockScreen = document.getElementById("lockScreen");
+    const dashboardContent = document.getElementById("dashboardContent");
+    const passwordInput = document.getElementById("dashboardPassword");
+    const passwordError = document.getElementById("passwordError");
     const searchInput = document.getElementById("searchInput");
     const ordersTableBody = document.getElementById("ordersTableBody");
 
@@ -358,6 +450,15 @@
 
       document.getElementById("latestBundle").textContent =
         orders.length > 0 ? (orders[0].bundle || "—") : "—";
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
     function renderOrders(orders) {
@@ -391,15 +492,6 @@
       }).join("");
 
       updateStats(orders);
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
     }
 
     function filterOrders() {
@@ -461,9 +553,41 @@
       }
     }
 
+    function unlockDashboard() {
+      const entered = passwordInput.value;
+
+      if (entered === DASHBOARD_PASSWORD) {
+        sessionStorage.setItem("ami_orders_unlocked", "true");
+        passwordError.textContent = "";
+        lockScreen.classList.add("hidden");
+        dashboardContent.classList.remove("hidden");
+        loadOrders();
+      } else {
+        passwordError.textContent = "Wrong password. Please try again.";
+      }
+    }
+
+    function logoutDashboard() {
+      sessionStorage.removeItem("ami_orders_unlocked");
+      dashboardContent.classList.add("hidden");
+      lockScreen.classList.remove("hidden");
+      passwordInput.value = "";
+      passwordError.textContent = "";
+    }
+
+    passwordInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        unlockDashboard();
+      }
+    });
+
     searchInput.addEventListener("input", filterOrders);
 
-    loadOrders();
+    if (sessionStorage.getItem("ami_orders_unlocked") === "true") {
+      lockScreen.classList.add("hidden");
+      dashboardContent.classList.remove("hidden");
+      loadOrders();
+    }
   </script>
 </body>
 </html>
