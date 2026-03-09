@@ -6,14 +6,13 @@
   <title>Ami Data Hub | Affordable MTN Data Bundles</title>
   <meta
     name="description"
-    content="Buy affordable MTN data bundles in Ghana. Fast delivery, trusted service, and easy WhatsApp order confirmation."
+    content="Buy affordable MTN data bundles in Ghana. Send MoMo first, then submit your order on WhatsApp."
   />
   <style>
     :root{
       --bg:#081120;
       --bg2:#0f172a;
       --card:#111c33;
-      --card2:#16233f;
       --text:#f8fafc;
       --muted:#cbd5e1;
       --line:rgba(255,255,255,0.10);
@@ -25,15 +24,8 @@
       --radius:22px;
     }
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
-
-    html{
-      scroll-behavior:smooth;
-    }
+    *{ box-sizing:border-box; margin:0; padding:0; }
+    html{ scroll-behavior:smooth; }
 
     body{
       font-family: Arial, Helvetica, sans-serif;
@@ -45,15 +37,9 @@
       line-height:1.55;
     }
 
-    a{
-      color:inherit;
-      text-decoration:none;
-    }
+    a{ color:inherit; text-decoration:none; }
 
-    .container{
-      width:min(1120px, 92%);
-      margin:auto;
-    }
+    .container{ width:min(1120px, 92%); margin:auto; }
 
     header{
       position:sticky;
@@ -100,22 +86,6 @@
       margin-top:2px;
     }
 
-    .nav-links{
-      display:flex;
-      align-items:center;
-      gap:18px;
-      flex-wrap:wrap;
-    }
-
-    .nav-links a{
-      color:var(--muted);
-      font-size:14px;
-    }
-
-    .nav-links a:hover{
-      color:white;
-    }
-
     .nav-btn{
       display:inline-flex;
       align-items:center;
@@ -130,13 +100,11 @@
       box-shadow: var(--shadow);
     }
 
-    .hero{
-      padding:72px 0 34px;
-    }
+    .hero{ padding:56px 0 28px; }
 
     .hero-grid{
       display:grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-columns: 1.1fr 0.9fr;
       gap:28px;
       align-items:center;
     }
@@ -151,9 +119,7 @@
       box-shadow:var(--shadow);
     }
 
-    .hero-card{
-      padding:34px;
-    }
+    .hero-card{ padding:32px; }
 
     .eyebrow{
       display:inline-flex;
@@ -169,8 +135,8 @@
     }
 
     h1{
-      font-size:clamp(32px, 5vw, 56px);
-      line-height:1.05;
+      font-size:clamp(30px, 5vw, 54px);
+      line-height:1.06;
       margin-bottom:16px;
     }
 
@@ -206,9 +172,7 @@
       box-shadow: var(--shadow);
     }
 
-    .btn-primary:hover{
-      transform:translateY(-1px);
-    }
+    .btn-primary:hover{ transform:translateY(-1px); }
 
     .btn-secondary{
       background:rgba(255,255,255,0.04);
@@ -216,9 +180,18 @@
       border:1px solid var(--line);
     }
 
-    .hero-side{
-      padding:24px;
+    .btn-dark{
+      background:rgba(255,255,255,0.06);
+      color:white;
+      border:1px solid var(--line);
     }
+
+    .btn-disabled{
+      opacity:0.55;
+      cursor:not-allowed;
+    }
+
+    .hero-side{ padding:24px; }
 
     .stat{
       display:flex;
@@ -228,9 +201,7 @@
       border-bottom:1px solid var(--line);
     }
 
-    .stat:last-child{
-      border-bottom:none;
-    }
+    .stat:last-child{ border-bottom:none; }
 
     .stat-label{
       color:var(--muted);
@@ -242,9 +213,7 @@
       font-size:18px;
     }
 
-    .section{
-      padding:32px 0;
-    }
+    .section{ padding:32px 0; }
 
     .section-title{
       font-size:30px;
@@ -263,9 +232,7 @@
       align-items:start;
     }
 
-    .panel{
-      padding:26px;
-    }
+    .panel{ padding:26px; }
 
     .panel h3{
       font-size:24px;
@@ -352,6 +319,27 @@
       font-size:13px;
     }
 
+    .payment-card{
+      background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(255,255,255,0.03));
+      border:1px solid rgba(245,158,11,0.20);
+      border-radius:18px;
+      padding:18px;
+      margin:18px 0;
+    }
+
+    .payment-card strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:17px;
+    }
+
+    .copy-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
     .instruction-list{
       display:grid;
       gap:14px;
@@ -379,20 +367,6 @@
       font-weight:800;
     }
 
-    .payment-card{
-      background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(255,255,255,0.03));
-      border:1px solid rgba(245,158,11,0.20);
-      border-radius:18px;
-      padding:18px;
-      margin:18px 0;
-    }
-
-    .payment-card strong{
-      display:block;
-      margin-bottom:6px;
-      font-size:17px;
-    }
-
     .support-box{
       display:flex;
       justify-content:space-between;
@@ -417,9 +391,7 @@
       gap:18px;
     }
 
-    .feature{
-      padding:22px;
-    }
+    .feature{ padding:22px; }
 
     .feature-icon{
       width:52px;
@@ -448,17 +420,48 @@
       gap:14px;
     }
 
-    .faq-item{
-      padding:20px;
-    }
+    .faq-item{ padding:20px; }
 
     .faq-item h4{
       margin-bottom:8px;
       font-size:18px;
     }
 
-    .faq-item p{
-      color:var(--muted);
+    .faq-item p{ color:var(--muted); }
+
+    .warning{
+      padding:14px 16px;
+      border-radius:14px;
+      background:rgba(239,68,68,0.08);
+      border:1px solid rgba(239,68,68,0.18);
+      color:#fecaca;
+      font-size:14px;
+    }
+
+    .success-note{
+      padding:14px 16px;
+      border-radius:14px;
+      background:rgba(34,197,94,0.08);
+      border:1px solid rgba(34,197,94,0.18);
+      color:#bbf7d0;
+      font-size:14px;
+    }
+
+    .hidden{ display:none; }
+
+    .checkbox-row{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.03);
+    }
+
+    .checkbox-row input{
+      margin-top:4px;
+      transform:scale(1.2);
     }
 
     footer{
@@ -476,26 +479,6 @@
       align-items:center;
     }
 
-    .warning{
-      margin-top:14px;
-      padding:14px 16px;
-      border-radius:14px;
-      background:rgba(239,68,68,0.08);
-      border:1px solid rgba(239,68,68,0.18);
-      color:#fecaca;
-      font-size:14px;
-    }
-
-    .success-note{
-      margin-top:14px;
-      padding:14px 16px;
-      border-radius:14px;
-      background:rgba(34,197,94,0.08);
-      border:1px solid rgba(34,197,94,0.18);
-      color:#bbf7d0;
-      font-size:14px;
-    }
-
     @media (max-width: 960px){
       .hero-grid,
       .order-layout,
@@ -503,17 +486,7 @@
         grid-template-columns:1fr;
       }
 
-      .nav{
-        padding:12px 0;
-      }
-
-      .nav-links{
-        display:none;
-      }
-
-      .hero{
-        padding-top:40px;
-      }
+      .hero{ padding-top:40px; }
 
       .hero-card,
       .hero-side,
@@ -523,26 +496,11 @@
     }
 
     @media (max-width: 560px){
-      h1{
-        font-size:34px;
-      }
-
-      .section-title{
-        font-size:26px;
-      }
-
-      .price-value{
-        font-size:26px;
-      }
-
-      .btn,
-      .nav-btn{
-        width:100%;
-      }
-
-      .hero-actions{
-        flex-direction:column;
-      }
+      h1{ font-size:34px; }
+      .section-title{ font-size:26px; }
+      .price-value{ font-size:26px; }
+      .btn, .nav-btn{ width:100%; }
+      .hero-actions{ flex-direction:column; }
     }
   </style>
 </head>
@@ -558,12 +516,6 @@
         </div>
       </div>
 
-      <nav class="nav-links">
-        <a href="#order">Order</a>
-        <a href="#why-us">Why Us</a>
-        <a href="#faq">FAQ</a>
-      </nav>
-
       <a class="nav-btn" href="#order">Order Now</a>
     </div>
   </header>
@@ -572,20 +524,16 @@
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-card">
-          <div class="eyebrow">✅ Trusted service • 📱 WhatsApp confirmation • ⚡ Fast response</div>
-          <h1>Buy affordable MTN data bundles in Ghana</h1>
+          <div class="eyebrow">✅ Send MoMo first • 📱 Then WhatsApp your order • ⚡ Fast response</div>
+          <h1>Send payment first, then submit your MTN data order</h1>
           <p>
-            Send Mobile Money to <strong>Gadese Charity Ami</strong>, then submit your order through WhatsApp.
-            We confirm your payment first, then process the bundle for you.
+            This website uses a safe manual process. Customers send Mobile Money to
+            <strong>Gadese Charity Ami</strong> first, then submit the order on WhatsApp for confirmation and delivery.
           </p>
 
           <div class="hero-actions">
-            <a href="#order" class="btn btn-primary">Start Your Order</a>
-            <a href="https://wa.me/233535296779" target="_blank" class="btn btn-secondary">Chat on WhatsApp</a>
-          </div>
-
-          <div class="success-note">
-            Orders are processed after payment confirmation. Please enter the correct recipient number before sending.
+            <a href="#order" class="btn btn-primary">Start Order</a>
+            <a href="https://wa.me/233535296779" target="_blank" class="btn btn-secondary">Open WhatsApp</a>
           </div>
         </div>
 
@@ -629,13 +577,13 @@
       <div class="container">
         <h2 class="section-title">Place your order</h2>
         <p class="section-sub">
-          Choose your bundle, send payment, then tap the WhatsApp button to submit your order.
+          Fill the form, send the MoMo payment, then send the prepared WhatsApp message.
         </p>
 
         <div class="order-layout">
           <div class="panel">
             <h3>Order Form</h3>
-            <p>Fill in the details below. The bundle price updates automatically.</p>
+            <p>The WhatsApp button stays locked until the payment checkbox is ticked.</p>
 
             <div class="form-grid">
               <div class="field">
@@ -677,7 +625,24 @@
                   <div class="price-value" id="selectedPrice">₵5</div>
                 </div>
                 <div class="mini-note">
-                  Send the exact amount by Mobile Money before clicking the WhatsApp order button.
+                  First send exactly this amount by MoMo before you submit your order.
+                </div>
+              </div>
+
+              <button class="btn btn-dark" type="button" onclick="showPaymentStep()">
+                Step 1 — Send MoMo First
+              </button>
+
+              <div id="paymentStepBox" class="payment-card hidden">
+                <strong>Send Payment To:</strong>
+                <div>Name: Gadese Charity Ami</div>
+                <div>Network: MTN MoMo</div>
+                <div>Number: <b id="momoNumberText">0535296779</b></div>
+                <div style="margin-top:8px;">Amount: <b id="paymentAmountText">₵5</b></div>
+
+                <div class="copy-row">
+                  <button class="btn btn-secondary" type="button" onclick="copyMomoNumber()">Copy MoMo Number</button>
+                  <button class="btn btn-secondary" type="button" onclick="copyAmount()">Copy Amount</button>
                 </div>
               </div>
 
@@ -691,56 +656,63 @@
                 <textarea id="extraNote" rows="4" placeholder="Any extra note..."></textarea>
               </div>
 
-              <button class="btn btn-primary" type="button" onclick="sendWhatsAppOrder()">
-                I Have Paid — Send Order on WhatsApp
+              <label class="checkbox-row">
+                <input type="checkbox" id="paidCheck" onchange="toggleWhatsAppButton()" />
+                <span>I have already sent the MoMo payment to Gadese Charity Ami.</span>
+              </label>
+
+              <button id="whatsappBtn" class="btn btn-primary btn-disabled" type="button" onclick="sendWhatsAppOrder()" disabled>
+                Step 2 — Send Order on WhatsApp
               </button>
 
               <div class="warning">
-                Double-check the recipient phone number before submitting. Wrong numbers entered by customers may lead to failed delivery.
+                This site cannot automatically confirm MoMo payment. The checkbox is only a customer confirmation step before WhatsApp opens.
               </div>
             </div>
           </div>
 
           <div class="panel">
-            <h3>Payment Instructions</h3>
-            <p>Send payment first, then submit your order through WhatsApp.</p>
-
-            <div class="payment-card">
-              <strong>Name: Gadese Charity Ami</strong>
-              <div>Network: MTN MoMo</div>
-              <div>Number: <b>0535296779</b></div>
-            </div>
+            <h3>How it works</h3>
+            <p>Follow these steps in order.</p>
 
             <div class="instruction-list">
               <div class="instruction">
                 <div class="instruction-num">1</div>
                 <div>
-                  <strong>Select your bundle</strong><br />
-                  Choose the MTN bundle you want from the dropdown list.
+                  <strong>Choose your bundle</strong><br />
+                  Select the MTN data bundle you want.
                 </div>
               </div>
 
               <div class="instruction">
                 <div class="instruction-num">2</div>
                 <div>
-                  <strong>Send payment</strong><br />
-                  Pay the exact amount to the MoMo number above.
+                  <strong>Tap “Send MoMo First”</strong><br />
+                  The payment details and exact amount will appear.
                 </div>
               </div>
 
               <div class="instruction">
                 <div class="instruction-num">3</div>
                 <div>
-                  <strong>Submit on WhatsApp</strong><br />
-                  Tap the WhatsApp button so your order details are sent directly.
+                  <strong>Send payment</strong><br />
+                  Transfer the exact amount to the MoMo number shown.
                 </div>
               </div>
 
               <div class="instruction">
                 <div class="instruction-num">4</div>
                 <div>
-                  <strong>Wait for confirmation</strong><br />
-                  After payment confirmation, your data bundle will be processed.
+                  <strong>Tick the payment checkbox</strong><br />
+                  After payment, confirm that you have sent it.
+                </div>
+              </div>
+
+              <div class="instruction">
+                <div class="instruction-num">5</div>
+                <div>
+                  <strong>Send WhatsApp order</strong><br />
+                  WhatsApp opens with your prepared order message.
                 </div>
               </div>
             </div>
@@ -752,6 +724,10 @@
               </div>
               <a class="btn btn-secondary" href="https://wa.me/233535296779" target="_blank">Open WhatsApp</a>
             </div>
+
+            <div class="success-note" style="margin-top:16px;">
+              Orders are processed after payment confirmation. Please double-check the recipient phone number before sending.
+            </div>
           </div>
         </div>
       </div>
@@ -759,34 +735,26 @@
 
     <section class="section" id="why-us">
       <div class="container">
-        <h2 class="section-title">Why customers will trust this service</h2>
-        <p class="section-sub">
-          Keep the process simple, clear, and easy to follow.
-        </p>
+        <h2 class="section-title">Why this method is better</h2>
+        <p class="section-sub">It protects your business from unfunded orders.</p>
 
         <div class="features">
           <div class="feature">
-            <div class="feature-icon">⚡</div>
-            <h4>Fast Response</h4>
-            <p>
-              Orders are reviewed quickly after payment confirmation so customers get their bundles without unnecessary delay.
-            </p>
+            <div class="feature-icon">💰</div>
+            <h4>Payment First</h4>
+            <p>Customers are guided to send MoMo before the order message is submitted.</p>
           </div>
 
           <div class="feature">
-            <div class="feature-icon">🔒</div>
-            <h4>Safe Manual Confirmation</h4>
-            <p>
-              Customers pay first, and you confirm before processing. This helps protect your business from unfunded orders.
-            </p>
+            <div class="feature-icon">🛡️</div>
+            <h4>Low Risk</h4>
+            <p>You avoid spending your own money before customers have paid.</p>
           </div>
 
           <div class="feature">
-            <div class="feature-icon">📱</div>
-            <h4>Simple WhatsApp Ordering</h4>
-            <p>
-              The site prepares the message automatically, making it easy for customers to send complete order details.
-            </p>
+            <div class="feature-icon">📲</div>
+            <h4>Simple WhatsApp Confirmation</h4>
+            <p>The final order still reaches your sister directly on WhatsApp.</p>
           </div>
         </div>
       </div>
@@ -795,35 +763,27 @@
     <section class="section" id="faq">
       <div class="container">
         <h2 class="section-title">Frequently Asked Questions</h2>
-        <p class="section-sub">Clear answers improve customer trust.</p>
+        <p class="section-sub">Simple answers for customers.</p>
 
         <div class="faq">
           <div class="faq-item">
-            <h4>How do I order?</h4>
-            <p>
-              Select your MTN bundle, send the exact MoMo payment, then tap the WhatsApp button to submit your details.
-            </p>
+            <h4>Do I pay before WhatsApp?</h4>
+            <p>Yes. First send MoMo, then tick the payment checkbox, then send the WhatsApp order.</p>
           </div>
 
           <div class="faq-item">
-            <h4>When will I receive my data?</h4>
-            <p>
-              Orders are processed after payment confirmation. Delivery time can depend on network conditions and order volume.
-            </p>
+            <h4>Does the website verify my MoMo payment automatically?</h4>
+            <p>No. Payment is confirmed manually after you send the WhatsApp order.</p>
           </div>
 
           <div class="faq-item">
-            <h4>Can I enter another person’s number?</h4>
-            <p>
-              Yes, but make sure the recipient number is correct before submitting the order.
-            </p>
+            <h4>What if I enter the wrong recipient number?</h4>
+            <p>Please double-check the number before submitting. Customers are responsible for confirming the correct number.</p>
           </div>
 
           <div class="faq-item">
-            <h4>What if I send the wrong number?</h4>
-            <p>
-              Customers are responsible for confirming the correct recipient number before submitting the order.
-            </p>
+            <h4>How long does delivery take?</h4>
+            <p>Orders are processed after payment confirmation, depending on network conditions and order volume.</p>
           </div>
         </div>
       </div>
@@ -847,6 +807,10 @@
     const bundleSelect = document.getElementById("bundleSelect");
     const selectedPrice = document.getElementById("selectedPrice");
     const selectedBundleText = document.getElementById("selectedBundleText");
+    const paymentAmountText = document.getElementById("paymentAmountText");
+    const paymentStepBox = document.getElementById("paymentStepBox");
+    const paidCheck = document.getElementById("paidCheck");
+    const whatsappBtn = document.getElementById("whatsappBtn");
 
     function updateBundleDisplay() {
       const option = bundleSelect.options[bundleSelect.selectedIndex];
@@ -855,6 +819,51 @@
 
       selectedBundleText.textContent = "MTN " + bundleName;
       selectedPrice.textContent = "₵" + price;
+      paymentAmountText.textContent = "₵" + price;
+    }
+
+    function showPaymentStep() {
+      const customerName = document.getElementById("customerName").value.trim();
+      const recipientNumber = document.getElementById("recipientNumber").value.trim();
+
+      if (!customerName) {
+        alert("Please enter your name first.");
+        return;
+      }
+
+      if (!recipientNumber) {
+        alert("Please enter the recipient phone number first.");
+        return;
+      }
+
+      updateBundleDisplay();
+      paymentStepBox.classList.remove("hidden");
+      paymentStepBox.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function copyMomoNumber() {
+      navigator.clipboard.writeText("0535296779")
+        .then(() => alert("MoMo number copied."))
+        .catch(() => alert("Could not copy automatically. Please copy the number manually."));
+    }
+
+    function copyAmount() {
+      const option = bundleSelect.options[bundleSelect.selectedIndex];
+      const price = option.dataset.price;
+
+      navigator.clipboard.writeText(price)
+        .then(() => alert("Amount copied."))
+        .catch(() => alert("Could not copy automatically. Please copy the amount manually."));
+    }
+
+    function toggleWhatsAppButton() {
+      if (paidCheck.checked) {
+        whatsappBtn.disabled = false;
+        whatsappBtn.classList.remove("btn-disabled");
+      } else {
+        whatsappBtn.disabled = true;
+        whatsappBtn.classList.add("btn-disabled");
+      }
     }
 
     function sendWhatsAppOrder() {
@@ -877,12 +886,17 @@
         return;
       }
 
+      if (!paidCheck.checked) {
+        alert("Please confirm that you have sent the payment first.");
+        return;
+      }
+
       const whatsappNumber = "233535296779";
 
       let message =
 `Hello Ami Data Hub,
 
-I want to buy data.
+I have already sent payment and I want to buy data.
 
 Name: ${customerName}
 Bundle: MTN ${bundleName}
@@ -910,6 +924,7 @@ Please confirm my payment and process my order.`;
 
     bundleSelect.addEventListener("change", updateBundleDisplay);
     updateBundleDisplay();
+    toggleWhatsAppButton();
   </script>
 </body>
 </html>
