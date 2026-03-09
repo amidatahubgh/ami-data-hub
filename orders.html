@@ -16,16 +16,13 @@
       --accent:#22c55e;
       --accent2:#16a34a;
       --danger:#ef4444;
+      --warning:#f59e0b;
       --card:#111c33;
       --shadow:0 18px 50px rgba(0,0,0,0.28);
       --radius:20px;
     }
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
+    *{ box-sizing:border-box; margin:0; padding:0; }
 
     body{
       font-family:Arial, Helvetica, sans-serif;
@@ -37,7 +34,7 @@
     }
 
     .container{
-      width:min(1200px, 94%);
+      width:min(1280px, 95%);
       margin:auto;
       padding:28px 0 40px;
     }
@@ -182,7 +179,7 @@
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:1000px;
+      min-width:1180px;
     }
 
     th, td{
@@ -225,6 +222,29 @@
       background:rgba(239,68,68,0.10);
       border:1px solid rgba(239,68,68,0.18);
       color:#fecaca;
+    }
+
+    .status-pending{
+      background:rgba(245,158,11,0.10);
+      border:1px solid rgba(245,158,11,0.18);
+      color:#fde68a;
+    }
+
+    .status-fulfilled{
+      background:rgba(34,197,94,0.10);
+      border:1px solid rgba(34,197,94,0.18);
+      color:#bbf7d0;
+    }
+
+    .mini-btn{
+      padding:8px 12px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-size:12px;
+      font-weight:700;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:white;
     }
 
     .empty{
@@ -347,7 +367,7 @@
       <div class="topbar">
         <div class="title">
           <h1>Ami Data Hub Orders</h1>
-          <p>View paid orders saved from your payment system.</p>
+          <p>View paid orders and mark them as fulfilled after sending data.</p>
         </div>
 
         <div class="actions">
@@ -367,12 +387,12 @@
           <div class="stat-value" id="successfulOrders">0</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">Total Revenue</div>
-          <div class="stat-value" id="totalRevenue">GHS 0</div>
+          <div class="stat-label">Pending Fulfillment</div>
+          <div class="stat-value" id="pendingFulfillment">0</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">Latest Bundle</div>
-          <div class="stat-value" id="latestBundle">—</div>
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-value" id="totalRevenue">GHS 0</div>
         </div>
       </div>
 
@@ -398,15 +418,16 @@
                 <th>Recipient Number</th>
                 <th>Bundle</th>
                 <th>Amount</th>
-                <th>Status</th>
+                <th>Payment</th>
+                <th>Fulfillment</th>
                 <th>Reference</th>
                 <th>Created At</th>
-                <th>Extra Note</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody id="ordersTableBody">
               <tr>
-                <td colspan="10" class="empty">Loading orders...</td>
+                <td colspan="11" class="empty">Loading orders...</td>
               </tr>
             </tbody>
           </table>
@@ -414,16 +435,14 @@
       </div>
 
       <div class="note">
-        This is a simple browser password gate. It helps hide the page, but it is not strong security. The stronger next upgrade is backend token protection.
+        Orders can now be marked as fulfilled. That helps your sister track which paid orders have already been delivered.
       </div>
     </div>
   </div>
 
   <script>
     const BACKEND_URL = "https://ami-data-backend.proud-fog-38e9.workers.dev";
-
-    // CHANGE THIS PASSWORD TO YOUR OWN
-    const DASHBOARD_PASSWORD = "Ghanaboy1.";
+    const DASHBOARD_PASSWORD = "Ghanaboy1";
 
     const lockScreen = document.getElementById("lockScreen");
     const dashboardContent = document.getElementById("dashboardContent");
@@ -439,19 +458,6 @@
       return `GHS ${number}`;
     }
 
-    function updateStats(orders) {
-      document.getElementById("totalOrders").textContent = orders.length;
-
-      const successful = orders.filter(order => order.payment_status === "success");
-      document.getElementById("successfulOrders").textContent = successful.length;
-
-      const revenue = successful.reduce((sum, order) => sum + Number(order.amount_paid || 0), 0);
-      document.getElementById("totalRevenue").textContent = formatCurrency(revenue);
-
-      document.getElementById("latestBundle").textContent =
-        orders.length > 0 ? (orders[0].bundle || "—") : "—";
-    }
-
     function escapeHtml(value) {
       return String(value)
         .replaceAll("&", "&amp;")
@@ -461,11 +467,24 @@
         .replaceAll("'", "&#039;");
     }
 
+    function updateStats(orders) {
+      document.getElementById("totalOrders").textContent = orders.length;
+
+      const successful = orders.filter(order => order.payment_status === "success");
+      document.getElementById("successfulOrders").textContent = successful.length;
+
+      const pending = orders.filter(order => order.fulfillment_status !== "fulfilled");
+      document.getElementById("pendingFulfillment").textContent = pending.length;
+
+      const revenue = successful.reduce((sum, order) => sum + Number(order.amount_paid || 0), 0);
+      document.getElementById("totalRevenue").textContent = formatCurrency(revenue);
+    }
+
     function renderOrders(orders) {
       if (!orders.length) {
         ordersTableBody.innerHTML = `
           <tr>
-            <td colspan="10" class="empty">No orders found.</td>
+            <td colspan="11" class="empty">No orders found.</td>
           </tr>
         `;
         updateStats([]);
@@ -473,7 +492,11 @@
       }
 
       ordersTableBody.innerHTML = orders.map(order => {
-        const statusClass = order.payment_status === "success" ? "status-success" : "status-other";
+        const paymentClass = order.payment_status === "success" ? "status-success" : "status-other";
+        const fulfillmentClass = order.fulfillment_status === "fulfilled" ? "status-fulfilled" : "status-pending";
+        const actionButton = order.fulfillment_status === "fulfilled"
+          ? `<button class="mini-btn" disabled style="opacity:.6;cursor:not-allowed;">Fulfilled</button>`
+          : `<button class="mini-btn" onclick="markFulfilled('${escapeHtml(order.reference || "")}')">Mark Fulfilled</button>`;
 
         return `
           <tr>
@@ -483,10 +506,11 @@
             <td>${escapeHtml(order.recipient_number || "")}</td>
             <td>${escapeHtml(order.bundle || "")}</td>
             <td>${formatCurrency(order.amount_paid)}</td>
-            <td><span class="status-pill ${statusClass}">${escapeHtml(order.payment_status || "")}</span></td>
+            <td><span class="status-pill ${paymentClass}">${escapeHtml(order.payment_status || "")}</span></td>
+            <td><span class="status-pill ${fulfillmentClass}">${escapeHtml(order.fulfillment_status || "pending")}</span></td>
             <td>${escapeHtml(order.reference || "")}</td>
             <td>${escapeHtml(order.created_at || "")}</td>
-            <td>${escapeHtml(order.extra_note || "")}</td>
+            <td>${actionButton}</td>
           </tr>
         `;
       }).join("");
@@ -511,6 +535,7 @@
           order.reference,
           order.extra_note,
           order.payment_status,
+          order.fulfillment_status,
           order.created_at
         ]
         .join(" ")
@@ -525,7 +550,7 @@
     async function loadOrders() {
       ordersTableBody.innerHTML = `
         <tr>
-          <td colspan="10" class="empty">Loading orders...</td>
+          <td colspan="11" class="empty">Loading orders...</td>
         </tr>
       `;
 
@@ -545,11 +570,43 @@
 
         ordersTableBody.innerHTML = `
           <tr>
-            <td colspan="10" class="empty">Could not load orders.</td>
+            <td colspan="11" class="empty">Could not load orders.</td>
           </tr>
         `;
 
         updateStats([]);
+      }
+    }
+
+    async function markFulfilled(reference) {
+      if (!reference) return;
+
+      const ok = confirm("Mark this order as fulfilled?");
+      if (!ok) return;
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/update-fulfillment`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            reference,
+            fulfillmentStatus: "fulfilled"
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.status) {
+          await loadOrders();
+          return;
+        }
+
+        throw new Error(data.error || "Failed to update fulfillment.");
+      } catch (error) {
+        console.error("Fulfillment update error:", error);
+        alert("Could not update fulfillment status.");
       }
     }
 
