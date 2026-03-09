@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ami Data Hub | Affordable MTN Data Bundles</title>
+  <meta
+    name="description"
+    content="Buy affordable MTN data bundles in Ghana. Fast delivery, trusted service, and easy WhatsApp order confirmation."
+  />
+  <style>
+    :root{
+      --bg:#081120;
+      --bg2:#0f172a;
+      --card:#111c33;
+      --card2:#16233f;
+      --text:#f8fafc;
+      --muted:#cbd5e1;
+      --line:rgba(255,255,255,0.10);
+      --accent:#22c55e;
+      --accent2:#16a34a;
+      --gold:#f59e0b;
+      --danger:#ef4444;
+      --shadow:0 18px 50px rgba(0,0,0,0.28);
+      --radius:22px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(34,197,94,0.10), transparent 22%),
+        radial-gradient(circle at left top, rgba(245,158,11,0.10), transparent 18%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color:var(--text);
+      line-height:1.55;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .container{
+      width:min(1120px, 92%);
+      margin:auto;
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(12px);
+      background:rgba(8,17,32,0.72);
+      border-bottom:1px solid var(--line);
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      min-height:78px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:700;
+      letter-spacing:0.2px;
+    }
+
+    .brand-badge{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:white;
+      font-size:20px;
+      box-shadow: var(--shadow);
+    }
+
+    .brand small{
+      display:block;
+      color:var(--muted);
+      font-weight:400;
+      font-size:12px;
+      margin-top:2px;
+    }
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+
+    .nav-links a{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .nav-links a:hover{
+      color:white;
+    }
+
+    .nav-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px 18px;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:white;
+      font-weight:700;
+      border:none;
+      cursor:pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .hero{
+      padding:72px 0 34px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap:28px;
+      align-items:center;
+    }
+
+    .hero-card,
+    .panel,
+    .feature,
+    .faq-item{
+      background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .hero-card{
+      padding:34px;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 14px;
+      border:1px solid rgba(34,197,94,0.25);
+      border-radius:999px;
+      color:#bbf7d0;
+      background:rgba(34,197,94,0.08);
+      font-size:13px;
+      margin-bottom:18px;
+    }
+
+    h1{
+      font-size:clamp(32px, 5vw, 56px);
+      line-height:1.05;
+      margin-bottom:16px;
+    }
+
+    .hero p{
+      color:var(--muted);
+      font-size:17px;
+      max-width:700px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:24px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 20px;
+      border-radius:14px;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+      font-size:15px;
+      transition:0.2s ease;
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#fff;
+      box-shadow: var(--shadow);
+    }
+
+    .btn-primary:hover{
+      transform:translateY(-1px);
+    }
+
+    .btn-secondary{
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .hero-side{
+      padding:24px;
+    }
+
+    .stat{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 0;
+      border-bottom:1px solid var(--line);
+    }
+
+    .stat:last-child{
+      border-bottom:none;
+    }
+
+    .stat-label{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .stat-value{
+      font-weight:700;
+      font-size:18px;
+    }
+
+    .section{
+      padding:32px 0;
+    }
+
+    .section-title{
+      font-size:30px;
+      margin-bottom:10px;
+    }
+
+    .section-sub{
+      color:var(--muted);
+      margin-bottom:22px;
+    }
+
+    .order-layout{
+      display:grid;
+      grid-template-columns: 1fr 0.9fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .panel{
+      padding:26px;
+    }
+
+    .panel h3{
+      font-size:24px;
+      margin-bottom:8px;
+    }
+
+    .panel p{
+      color:var(--muted);
+      margin-bottom:18px;
+    }
+
+    .form-grid{
+      display:grid;
+      gap:16px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field label{
+      font-size:14px;
+      color:#e2e8f0;
+      font-weight:700;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      padding:14px 14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.03);
+      color:white;
+      outline:none;
+      font-size:15px;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder{
+      color:#94a3b8;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus{
+      border-color:rgba(34,197,94,0.45);
+      box-shadow:0 0 0 4px rgba(34,197,94,0.10);
+    }
+
+    .price-box{
+      margin-top:8px;
+      padding:18px;
+      border-radius:18px;
+      background:linear-gradient(135deg, rgba(34,197,94,0.12), rgba(22,163,74,0.06));
+      border:1px solid rgba(34,197,94,0.20);
+    }
+
+    .price-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+      margin-bottom:10px;
+    }
+
+    .price-label{
+      color:#bbf7d0;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .price-value{
+      font-size:30px;
+      font-weight:800;
+      color:white;
+    }
+
+    .mini-note{
+      color:#d1fae5;
+      font-size:13px;
+    }
+
+    .instruction-list{
+      display:grid;
+      gap:14px;
+      margin-top:14px;
+    }
+
+    .instruction{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:14px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid var(--line);
+    }
+
+    .instruction-num{
+      min-width:34px;
+      height:34px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      background:rgba(34,197,94,0.15);
+      color:#bbf7d0;
+      font-weight:800;
+    }
+
+    .payment-card{
+      background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(255,255,255,0.03));
+      border:1px solid rgba(245,158,11,0.20);
+      border-radius:18px;
+      padding:18px;
+      margin:18px 0;
+    }
+
+    .payment-card strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:17px;
+    }
+
+    .support-box{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      padding:16px;
+      margin-top:18px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid var(--line);
+    }
+
+    .support-box span{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .features{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:18px;
+    }
+
+    .feature{
+      padding:22px;
+    }
+
+    .feature-icon{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      font-size:24px;
+      margin-bottom:14px;
+      background:rgba(34,197,94,0.10);
+      border:1px solid rgba(34,197,94,0.18);
+    }
+
+    .feature h4{
+      font-size:18px;
+      margin-bottom:8px;
+    }
+
+    .feature p{
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .faq{
+      display:grid;
+      gap:14px;
+    }
+
+    .faq-item{
+      padding:20px;
+    }
+
+    .faq-item h4{
+      margin-bottom:8px;
+      font-size:18px;
+    }
+
+    .faq-item p{
+      color:var(--muted);
+    }
+
+    footer{
+      margin-top:34px;
+      border-top:1px solid var(--line);
+      padding:28px 0 34px;
+      color:var(--muted);
+    }
+
+    .footer-box{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .warning{
+      margin-top:14px;
+      padding:14px 16px;
+      border-radius:14px;
+      background:rgba(239,68,68,0.08);
+      border:1px solid rgba(239,68,68,0.18);
+      color:#fecaca;
+      font-size:14px;
+    }
+
+    .success-note{
+      margin-top:14px;
+      padding:14px 16px;
+      border-radius:14px;
+      background:rgba(34,197,94,0.08);
+      border:1px solid rgba(34,197,94,0.18);
+      color:#bbf7d0;
+      font-size:14px;
+    }
+
+    @media (max-width: 960px){
+      .hero-grid,
+      .order-layout,
+      .features{
+        grid-template-columns:1fr;
+      }
+
+      .nav{
+        padding:12px 0;
+      }
+
+      .nav-links{
+        display:none;
+      }
+
+      .hero{
+        padding-top:40px;
+      }
+
+      .hero-card,
+      .hero-side,
+      .panel{
+        padding:22px;
+      }
+    }
+
+    @media (max-width: 560px){
+      h1{
+        font-size:34px;
+      }
+
+      .section-title{
+        font-size:26px;
+      }
+
+      .price-value{
+        font-size:26px;
+      }
+
+      .btn,
+      .nav-btn{
+        width:100%;
+      }
+
+      .hero-actions{
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="brand-badge">📶</div>
+        <div>
+          Ami Data Hub
+          <small>Affordable MTN Data Bundles</small>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#order">Order</a>
+        <a href="#why-us">Why Us</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <a class="nav-btn" href="#order">Order Now</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-card">
+          <div class="eyebrow">✅ Trusted service • 📱 WhatsApp confirmation • ⚡ Fast response</div>
+          <h1>Buy affordable MTN data bundles in Ghana</h1>
+          <p>
+            Send Mobile Money to <strong>Gadese Charity Ami</strong>, then submit your order through WhatsApp.
+            We confirm your payment first, then process the bundle for you.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#order" class="btn btn-primary">Start Your Order</a>
+            <a href="https://wa.me/233535296779" target="_blank" class="btn btn-secondary">Chat on WhatsApp</a>
+          </div>
+
+          <div class="success-note">
+            Orders are processed after payment confirmation. Please enter the correct recipient number before sending.
+          </div>
+        </div>
+
+        <div class="hero-card hero-side">
+          <div class="stat">
+            <div>
+              <div class="stat-label">Business Name</div>
+              <div class="stat-value">Ami Data Hub</div>
+            </div>
+            <div>🏪</div>
+          </div>
+
+          <div class="stat">
+            <div>
+              <div class="stat-label">Owner</div>
+              <div class="stat-value">Gadese Charity Ami</div>
+            </div>
+            <div>👩🏽</div>
+          </div>
+
+          <div class="stat">
+            <div>
+              <div class="stat-label">WhatsApp / MoMo</div>
+              <div class="stat-value">0535296779</div>
+            </div>
+            <div>📲</div>
+          </div>
+
+          <div class="stat">
+            <div>
+              <div class="stat-label">Network</div>
+              <div class="stat-value">MTN Ghana</div>
+            </div>
+            <div>📡</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="order">
+      <div class="container">
+        <h2 class="section-title">Place your order</h2>
+        <p class="section-sub">
+          Choose your bundle, send payment, then tap the WhatsApp button to submit your order.
+        </p>
+
+        <div class="order-layout">
+          <div class="panel">
+            <h3>Order Form</h3>
+            <p>Fill in the details below. The bundle price updates automatically.</p>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="customerName">Your Name</label>
+                <input type="text" id="customerName" placeholder="Enter your full name" />
+              </div>
+
+              <div class="field">
+                <label for="recipientNumber">Recipient Phone Number</label>
+                <input type="tel" id="recipientNumber" placeholder="e.g. 0241234567" />
+              </div>
+
+              <div class="field">
+                <label for="bundleSelect">Choose MTN Bundle</label>
+                <select id="bundleSelect">
+                  <option value="1GB" data-price="5">MTN 1GB</option>
+                  <option value="2GB" data-price="10">MTN 2GB</option>
+                  <option value="3GB" data-price="14">MTN 3GB</option>
+                  <option value="4GB" data-price="20">MTN 4GB</option>
+                  <option value="5GB" data-price="24">MTN 5GB</option>
+                  <option value="6GB" data-price="27">MTN 6GB</option>
+                  <option value="8GB" data-price="36">MTN 8GB</option>
+                  <option value="10GB" data-price="44.5">MTN 10GB</option>
+                  <option value="15GB" data-price="64">MTN 15GB</option>
+                  <option value="20GB" data-price="85">MTN 20GB</option>
+                  <option value="25GB" data-price="109.5">MTN 25GB</option>
+                  <option value="30GB" data-price="129.5">MTN 30GB</option>
+                  <option value="40GB" data-price="173.5">MTN 40GB</option>
+                  <option value="50GB" data-price="217">MTN 50GB</option>
+                </select>
+              </div>
+
+              <div class="price-box">
+                <div class="price-top">
+                  <div>
+                    <div class="price-label">Selected Bundle Price</div>
+                    <div class="mini-note" id="selectedBundleText">MTN 1GB</div>
+                  </div>
+                  <div class="price-value" id="selectedPrice">₵5</div>
+                </div>
+                <div class="mini-note">
+                  Send the exact amount by Mobile Money before clicking the WhatsApp order button.
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="paymentRef">MoMo Reference / Sender Name (Optional)</label>
+                <input type="text" id="paymentRef" placeholder="Optional payment reference" />
+              </div>
+
+              <div class="field">
+                <label for="extraNote">Extra Note (Optional)</label>
+                <textarea id="extraNote" rows="4" placeholder="Any extra note..."></textarea>
+              </div>
+
+              <button class="btn btn-primary" type="button" onclick="sendWhatsAppOrder()">
+                I Have Paid — Send Order on WhatsApp
+              </button>
+
+              <div class="warning">
+                Double-check the recipient phone number before submitting. Wrong numbers entered by customers may lead to failed delivery.
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Payment Instructions</h3>
+            <p>Send payment first, then submit your order through WhatsApp.</p>
+
+            <div class="payment-card">
+              <strong>Name: Gadese Charity Ami</strong>
+              <div>Network: MTN MoMo</div>
+              <div>Number: <b>0535296779</b></div>
+            </div>
+
+            <div class="instruction-list">
+              <div class="instruction">
+                <div class="instruction-num">1</div>
+                <div>
+                  <strong>Select your bundle</strong><br />
+                  Choose the MTN bundle you want from the dropdown list.
+                </div>
+              </div>
+
+              <div class="instruction">
+                <div class="instruction-num">2</div>
+                <div>
+                  <strong>Send payment</strong><br />
+                  Pay the exact amount to the MoMo number above.
+                </div>
+              </div>
+
+              <div class="instruction">
+                <div class="instruction-num">3</div>
+                <div>
+                  <strong>Submit on WhatsApp</strong><br />
+                  Tap the WhatsApp button so your order details are sent directly.
+                </div>
+              </div>
+
+              <div class="instruction">
+                <div class="instruction-num">4</div>
+                <div>
+                  <strong>Wait for confirmation</strong><br />
+                  After payment confirmation, your data bundle will be processed.
+                </div>
+              </div>
+            </div>
+
+            <div class="support-box">
+              <div>
+                <strong>Need help?</strong><br />
+                <span>Contact us directly on WhatsApp for support.</span>
+              </div>
+              <a class="btn btn-secondary" href="https://wa.me/233535296779" target="_blank">Open WhatsApp</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="why-us">
+      <div class="container">
+        <h2 class="section-title">Why customers will trust this service</h2>
+        <p class="section-sub">
+          Keep the process simple, clear, and easy to follow.
+        </p>
+
+        <div class="features">
+          <div class="feature">
+            <div class="feature-icon">⚡</div>
+            <h4>Fast Response</h4>
+            <p>
+              Orders are reviewed quickly after payment confirmation so customers get their bundles without unnecessary delay.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="feature-icon">🔒</div>
+            <h4>Safe Manual Confirmation</h4>
+            <p>
+              Customers pay first, and you confirm before processing. This helps protect your business from unfunded orders.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="feature-icon">📱</div>
+            <h4>Simple WhatsApp Ordering</h4>
+            <p>
+              The site prepares the message automatically, making it easy for customers to send complete order details.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-sub">Clear answers improve customer trust.</p>
+
+        <div class="faq">
+          <div class="faq-item">
+            <h4>How do I order?</h4>
+            <p>
+              Select your MTN bundle, send the exact MoMo payment, then tap the WhatsApp button to submit your details.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h4>When will I receive my data?</h4>
+            <p>
+              Orders are processed after payment confirmation. Delivery time can depend on network conditions and order volume.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h4>Can I enter another person’s number?</h4>
+            <p>
+              Yes, but make sure the recipient number is correct before submitting the order.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h4>What if I send the wrong number?</h4>
+            <p>
+              Customers are responsible for confirming the correct recipient number before submitting the order.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-box">
+      <div>
+        <strong>Ami Data Hub</strong><br />
+        Affordable MTN Data Bundles in Ghana
+      </div>
+      <div>
+        Owner: Gadese Charity Ami<br />
+        WhatsApp / MoMo: 0535296779
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const bundleSelect = document.getElementById("bundleSelect");
+    const selectedPrice = document.getElementById("selectedPrice");
+    const selectedBundleText = document.getElementById("selectedBundleText");
+
+    function updateBundleDisplay() {
+      const option = bundleSelect.options[bundleSelect.selectedIndex];
+      const bundleName = option.value;
+      const price = option.dataset.price;
+
+      selectedBundleText.textContent = "MTN " + bundleName;
+      selectedPrice.textContent = "₵" + price;
+    }
+
+    function sendWhatsAppOrder() {
+      const customerName = document.getElementById("customerName").value.trim();
+      const recipientNumber = document.getElementById("recipientNumber").value.trim();
+      const paymentRef = document.getElementById("paymentRef").value.trim();
+      const extraNote = document.getElementById("extraNote").value.trim();
+
+      const option = bundleSelect.options[bundleSelect.selectedIndex];
+      const bundleName = option.value;
+      const price = option.dataset.price;
+
+      if (!customerName) {
+        alert("Please enter your name.");
+        return;
+      }
+
+      if (!recipientNumber) {
+        alert("Please enter the recipient phone number.");
+        return;
+      }
+
+      const whatsappNumber = "233535296779";
+
+      let message =
+`Hello Ami Data Hub,
+
+I want to buy data.
+
+Name: ${customerName}
+Bundle: MTN ${bundleName}
+Price: ₵${price}
+Recipient Phone Number: ${recipientNumber}
+Payment Sent: Yes`;
+
+      if (paymentRef) {
+        message += `\nMoMo Reference / Sender Name: ${paymentRef}`;
+      }
+
+      if (extraNote) {
+        message += `\nExtra Note: ${extraNote}`;
+      }
+
+      message += `
+
+Please confirm my payment and process my order.`;
+
+      const encodedMessage = encodeURIComponent(message);
+      const url = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+      window.open(url, "_blank");
+    }
+
+    bundleSelect.addEventListener("change", updateBundleDisplay);
+    updateBundleDisplay();
+  </script>
+</body>
+</html>
