@@ -17,6 +17,7 @@
       --accent2:#16a34a;
       --danger:#ef4444;
       --warning:#f59e0b;
+      --info:#38bdf8;
       --card:#111c33;
       --shadow:0 18px 50px rgba(0,0,0,0.28);
       --radius:20px;
@@ -34,7 +35,7 @@
     }
 
     .container{
-      width:min(1280px, 95%);
+      width:min(1320px, 95%);
       margin:auto;
       padding:28px 0 40px;
     }
@@ -179,7 +180,7 @@
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:1180px;
+      min-width:1320px;
     }
 
     th, td{
@@ -210,6 +211,7 @@
       font-size:12px;
       font-weight:700;
       text-transform:capitalize;
+      white-space:nowrap;
     }
 
     .status-success{
@@ -236,15 +238,34 @@
       color:#bbf7d0;
     }
 
+    .action-stack{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-width:150px;
+    }
+
     .mini-btn{
-      padding:8px 12px;
+      padding:9px 12px;
       border-radius:10px;
       border:none;
       cursor:pointer;
       font-size:12px;
       font-weight:700;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
       color:white;
+    }
+
+    .mini-btn-fulfill{
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+
+    .mini-btn-wa{
+      background:linear-gradient(135deg, var(--info), #0284c7);
+    }
+
+    .mini-btn[disabled]{
+      opacity:.6;
+      cursor:not-allowed;
     }
 
     .empty{
@@ -367,7 +388,7 @@
       <div class="topbar">
         <div class="title">
           <h1>Ami Data Hub Orders</h1>
-          <p>View paid orders and mark them as fulfilled after sending data.</p>
+          <p>View paid orders, message customers, and mark orders as fulfilled.</p>
         </div>
 
         <div class="actions">
@@ -435,7 +456,7 @@
       </div>
 
       <div class="note">
-        Orders can now be marked as fulfilled. That helps your sister track which paid orders have already been delivered.
+        This dashboard now includes a WhatsApp shortcut for each order. The next strong upgrade after this is filtering by pending only, or adding real backend login protection.
       </div>
     </div>
   </div>
@@ -480,6 +501,29 @@
       document.getElementById("totalRevenue").textContent = formatCurrency(revenue);
     }
 
+    function openWhatsAppForOrder(order) {
+      const customerName = order.customer_name || "Customer";
+      const recipientNumber = order.recipient_number || "Not available";
+      const bundle = order.bundle || "Not available";
+      const reference = order.reference || "Not available";
+      const fulfillment = order.fulfillment_status || "pending";
+
+      const message = encodeURIComponent(
+`Hello ${customerName},
+
+Your Ami Data Hub order details:
+
+Bundle: ${bundle}
+Recipient Number: ${recipientNumber}
+Reference: ${reference}
+Fulfillment Status: ${fulfillment}
+
+We are working on your order. Thank you.`
+      );
+
+      window.open(`https://wa.me/?text=${message}`, "_blank");
+    }
+
     function renderOrders(orders) {
       if (!orders.length) {
         ordersTableBody.innerHTML = `
@@ -494,9 +538,11 @@
       ordersTableBody.innerHTML = orders.map(order => {
         const paymentClass = order.payment_status === "success" ? "status-success" : "status-other";
         const fulfillmentClass = order.fulfillment_status === "fulfilled" ? "status-fulfilled" : "status-pending";
-        const actionButton = order.fulfillment_status === "fulfilled"
-          ? `<button class="mini-btn" disabled style="opacity:.6;cursor:not-allowed;">Fulfilled</button>`
-          : `<button class="mini-btn" onclick="markFulfilled('${escapeHtml(order.reference || "")}')">Mark Fulfilled</button>`;
+        const fulfillButton = order.fulfillment_status === "fulfilled"
+          ? `<button class="mini-btn mini-btn-fulfill" disabled>Fulfilled</button>`
+          : `<button class="mini-btn mini-btn-fulfill" onclick="markFulfilled('${escapeHtml(order.reference || "")}')">Mark Fulfilled</button>`;
+
+        const safeOrder = encodeURIComponent(JSON.stringify(order));
 
         return `
           <tr>
@@ -510,12 +556,27 @@
             <td><span class="status-pill ${fulfillmentClass}">${escapeHtml(order.fulfillment_status || "pending")}</span></td>
             <td>${escapeHtml(order.reference || "")}</td>
             <td>${escapeHtml(order.created_at || "")}</td>
-            <td>${actionButton}</td>
+            <td>
+              <div class="action-stack">
+                <button class="mini-btn mini-btn-wa" onclick="openWhatsAppFromRow('${safeOrder}')">WhatsApp Customer</button>
+                ${fulfillButton}
+              </div>
+            </td>
           </tr>
         `;
       }).join("");
 
       updateStats(orders);
+    }
+
+    function openWhatsAppFromRow(encodedOrder) {
+      try {
+        const order = JSON.parse(decodeURIComponent(encodedOrder));
+        openWhatsAppForOrder(order);
+      } catch (error) {
+        console.error("WhatsApp row parse error:", error);
+        alert("Could not prepare WhatsApp message.");
+      }
     }
 
     function filterOrders() {
