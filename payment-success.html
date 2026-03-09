@@ -15,11 +15,17 @@
       --line:rgba(255,255,255,0.10);
       --accent:#22c55e;
       --accent2:#16a34a;
+      --danger:#ef4444;
       --shadow:0 18px 50px rgba(0,0,0,0.28);
       --radius:22px;
     }
 
-    *{box-sizing:border-box;margin:0;padding:0;}
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
     body{
       font-family:Arial, Helvetica, sans-serif;
       min-height:100vh;
@@ -34,7 +40,7 @@
     }
 
     .card{
-      width:min(680px, 100%);
+      width:min(720px, 100%);
       background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
       border:1px solid var(--line);
       border-radius:var(--radius);
@@ -60,7 +66,7 @@
       margin-bottom:12px;
     }
 
-    p{
+    .intro{
       color:var(--muted);
       font-size:16px;
       line-height:1.6;
@@ -97,6 +103,49 @@
       word-break:break-word;
     }
 
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      margin-top:18px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid var(--line);
+      color:var(--text);
+    }
+
+    .status-success{
+      background:rgba(34,197,94,0.10);
+      border:1px solid rgba(34,197,94,0.18);
+      color:#bbf7d0;
+    }
+
+    .status-error{
+      background:rgba(239,68,68,0.10);
+      border:1px solid rgba(239,68,68,0.18);
+      color:#fecaca;
+    }
+
+    .note{
+      margin-top:18px;
+      padding:14px 16px;
+      border-radius:14px;
+      background:rgba(34,197,94,0.08);
+      border:1px solid rgba(34,197,94,0.18);
+      color:#bbf7d0;
+      font-size:14px;
+      text-align:left;
+    }
+
+    .note.error{
+      background:rgba(239,68,68,0.08);
+      border:1px solid rgba(239,68,68,0.18);
+      color:#fecaca;
+    }
+
     .actions{
       margin-top:24px;
       display:flex;
@@ -129,20 +178,18 @@
       border:1px solid var(--line);
     }
 
-    .note{
-      margin-top:18px;
-      padding:14px 16px;
-      border-radius:14px;
-      background:rgba(34,197,94,0.08);
-      border:1px solid rgba(34,197,94,0.18);
-      color:#bbf7d0;
-      font-size:14px;
-    }
-
     @media (max-width:560px){
-      h1{font-size:28px;}
-      .btn{width:100%;}
-      .actions{flex-direction:column;}
+      h1{
+        font-size:28px;
+      }
+
+      .btn{
+        width:100%;
+      }
+
+      .actions{
+        flex-direction:column;
+      }
     }
   </style>
 </head>
@@ -150,19 +197,31 @@
   <div class="card">
     <div class="icon">✅</div>
     <h1>Payment Successful</h1>
-    <p>
-      Thank you. Your payment was completed successfully.
-      We will use the payment details to process your MTN bundle order.
+    <p class="intro">
+      Thank you. Your payment has been completed.
+      We are now checking and confirming the payment details from our backend.
     </p>
 
-    <div class="box">
+    <div id="verifyStatus" class="status-pill">
+      Verifying payment...
+    </div>
+
+    <div class="box" id="paymentBox">
       <div class="row">
         <div class="label">Payment Reference</div>
         <div class="value" id="referenceValue">Checking...</div>
       </div>
       <div class="row">
-        <div class="label">Status</div>
-        <div class="value">Paid</div>
+        <div class="label">Verification Status</div>
+        <div class="value" id="paymentStatusValue">Checking...</div>
+      </div>
+      <div class="row">
+        <div class="label">Amount Paid</div>
+        <div class="value" id="amountValue">Checking...</div>
+      </div>
+      <div class="row">
+        <div class="label">Email</div>
+        <div class="value" id="emailValue">Checking...</div>
       </div>
       <div class="row">
         <div class="label">Business</div>
@@ -174,7 +233,7 @@
       </div>
     </div>
 
-    <div class="note">
+    <div class="note" id="noteBox">
       Please wait while your order is processed. If needed, contact support on WhatsApp with your payment reference.
     </div>
 
@@ -189,23 +248,106 @@
   </div>
 
   <script>
+    const BACKEND_URL = "https://ami-data-backend.proud-fog-38e9.workers.dev";
+
     const params = new URLSearchParams(window.location.search);
-    const reference = params.get("reference") || "Not available";
+    const reference = params.get("reference") || "";
 
-    document.getElementById("referenceValue").textContent = reference;
+    const verifyStatus = document.getElementById("verifyStatus");
+    const noteBox = document.getElementById("noteBox");
+    const referenceValue = document.getElementById("referenceValue");
+    const paymentStatusValue = document.getElementById("paymentStatusValue");
+    const amountValue = document.getElementById("amountValue");
+    const emailValue = document.getElementById("emailValue");
+    const whatsappLink = document.getElementById("whatsappLink");
 
-    const message = encodeURIComponent(
+    referenceValue.textContent = reference || "Not available";
+
+    function updateWhatsAppLink(ref, verifiedText) {
+      const message = encodeURIComponent(
 `Hello Ami Data Hub,
 
 My payment was successful.
 
-Reference: ${reference}
+Reference: ${ref || "Not available"}
+Verification: ${verifiedText}
 
 Please help me confirm and process my order.`
-    );
+      );
 
-    document.getElementById("whatsappLink").href =
-      `https://wa.me/233535296779?text=${message}`;
+      whatsappLink.href = `https://wa.me/233535296779?text=${message}`;
+    }
+
+    async function verifyPayment() {
+      if (!reference) {
+        verifyStatus.textContent = "Reference missing";
+        verifyStatus.classList.add("status-error");
+
+        paymentStatusValue.textContent = "Missing reference";
+        amountValue.textContent = "Not available";
+        emailValue.textContent = "Not available";
+
+        noteBox.textContent = "No payment reference was found in the URL. Please contact support on WhatsApp.";
+        noteBox.classList.add("error");
+
+        updateWhatsAppLink("", "Reference missing");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/verify-payment?reference=${encodeURIComponent(reference)}`);
+        const data = await res.json();
+
+        if (data.status && data.data) {
+          const paystackStatus = data.data.status || "unknown";
+          const paidAmount = typeof data.data.amount === "number" ? (data.data.amount / 100) : 0;
+          const paidEmail = data.data.customer?.email || "Not available";
+
+          referenceValue.textContent = reference;
+          paymentStatusValue.textContent = paystackStatus;
+          amountValue.textContent = `GHS ${paidAmount}`;
+          emailValue.textContent = paidEmail;
+
+          if (paystackStatus === "success") {
+            verifyStatus.textContent = "Payment verified successfully";
+            verifyStatus.classList.add("status-success");
+
+            noteBox.textContent = "Your payment has been verified successfully. Please wait while your order is processed. If needed, contact support on WhatsApp with your payment reference.";
+            noteBox.classList.remove("error");
+
+            updateWhatsAppLink(reference, "Verified successfully");
+          } else {
+            verifyStatus.textContent = `Verification result: ${paystackStatus}`;
+            verifyStatus.classList.add("status-error");
+
+            noteBox.textContent = "Your payment reference was found, but the payment is not marked as successful yet. If this looks wrong, contact support on WhatsApp.";
+            noteBox.classList.add("error");
+
+            updateWhatsAppLink(reference, `Status: ${paystackStatus}`);
+          }
+
+          return;
+        }
+
+        throw new Error(data.error || data.message || "Payment verification failed.");
+      } catch (error) {
+        console.error("Verification error:", error);
+
+        verifyStatus.textContent = "Could not verify payment";
+        verifyStatus.classList.add("status-error");
+
+        paymentStatusValue.textContent = "Verification failed";
+        amountValue.textContent = "Not available";
+        emailValue.textContent = "Not available";
+
+        noteBox.textContent = "We could not verify this payment automatically right now. Please contact support on WhatsApp with your payment reference.";
+        noteBox.classList.add("error");
+
+        updateWhatsAppLink(reference, "Verification failed");
+      }
+    }
+
+    verifyPayment();
   </script>
 </body>
 </html>
