@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Test Paystack Init</title>
+</head>
+<body>
+  <button id="testBtn">Test Payment Init</button>
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById("testBtn").addEventListener("click", async () => {
+      const output = document.getElementById("output");
+      output.textContent = "Loading...";
+
+      try {
+        const res = await fetch("https://ami-data-backend.proud-fog-38e9.workers.dev/initialize-payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: "test@example.com",
+            amount: 5,
+            customerName: "Test User",
+            recipientNumber: "0241234567",
+            bundle: "MTN 1GB"
+          })
+        });
+
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        output.textContent = "Error: " + err;
+      }
+    });
+  </script>
+</body>
+</html>
