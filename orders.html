@@ -19,6 +19,7 @@
       --warning:#f59e0b;
       --info:#38bdf8;
       --success:#10b981;
+      --copy:#8b5cf6;
       --card:#111c33;
       --shadow:0 18px 50px rgba(0,0,0,0.28);
       --radius:20px;
@@ -210,7 +211,7 @@
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:1420px;
+      min-width:1480px;
     }
 
     th, td{
@@ -295,6 +296,10 @@
 
     .mini-btn-delivered{
       background:linear-gradient(135deg, var(--success), #059669);
+    }
+
+    .mini-btn-copy{
+      background:linear-gradient(135deg, var(--copy), #7c3aed);
     }
 
     .mini-btn[disabled]{
@@ -589,6 +594,16 @@ Thank you for choosing Ami Data Hub.`
       window.open(`https://wa.me/?text=${message}`, "_blank");
     }
 
+    async function copyRecipientNumber(number) {
+      try {
+        await navigator.clipboard.writeText(String(number || ""));
+        alert("Recipient number copied.");
+      } catch (error) {
+        console.error("Copy failed:", error);
+        alert("Could not copy recipient number.");
+      }
+    }
+
     function renderOrders(orders) {
       if (!orders.length) {
         ordersTableBody.innerHTML = `
@@ -604,6 +619,7 @@ Thank you for choosing Ami Data Hub.`
         const paymentClass = order.payment_status === "success" ? "status-success" : "status-other";
         const fulfillmentClass = order.fulfillment_status === "fulfilled" ? "status-fulfilled" : "status-pending";
         const safeOrder = encodeURIComponent(JSON.stringify(order));
+        const safeRecipient = encodeURIComponent(String(order.recipient_number || ""));
 
         const fulfillButton = order.fulfillment_status === "fulfilled"
           ? `<button class="mini-btn mini-btn-fulfill" disabled>Fulfilled</button>`
@@ -623,6 +639,7 @@ Thank you for choosing Ami Data Hub.`
             <td>${escapeHtml(order.created_at || "")}</td>
             <td>
               <div class="action-stack">
+                <button class="mini-btn mini-btn-copy" onclick="copyRecipientFromRow('${safeRecipient}')">Copy Recipient Number</button>
                 <button class="mini-btn mini-btn-wa" onclick="openWhatsAppFromRow('${safeOrder}')">WhatsApp Customer</button>
                 <button class="mini-btn mini-btn-delivered" onclick="openDeliveredFromRow('${safeOrder}')">Delivered Message</button>
                 ${fulfillButton}
@@ -652,6 +669,16 @@ Thank you for choosing Ami Data Hub.`
       } catch (error) {
         console.error("Delivered row parse error:", error);
         alert("Could not prepare delivered message.");
+      }
+    }
+
+    function copyRecipientFromRow(encodedRecipient) {
+      try {
+        const recipient = decodeURIComponent(encodedRecipient);
+        copyRecipientNumber(recipient);
+      } catch (error) {
+        console.error("Recipient decode error:", error);
+        alert("Could not copy recipient number.");
       }
     }
 
