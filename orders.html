@@ -162,13 +162,14 @@
     }
 
     .search-box{
-      min-width:240px;
+      min-width:220px;
       max-width:320px;
       width:100%;
     }
 
     .search-box input,
-    .password-box input{
+    .password-box input,
+    .sort-select{
       width:100%;
       padding:12px 14px;
       border-radius:14px;
@@ -182,6 +183,10 @@
     .search-box input::placeholder,
     .password-box input::placeholder{
       color:#94a3b8;
+    }
+
+    .sort-wrap{
+      min-width:190px;
     }
 
     .filter-tabs{
@@ -501,6 +506,15 @@
               <button class="filter-tab" data-filter="today" onclick="setFilter('today')">Today</button>
             </div>
 
+            <div class="sort-wrap">
+              <select id="sortSelect" class="sort-select">
+                <option value="newest">Sort: Newest First</option>
+                <option value="oldest">Sort: Oldest First</option>
+                <option value="highest">Sort: Highest Amount</option>
+                <option value="lowest">Sort: Lowest Amount</option>
+              </select>
+            </div>
+
             <div class="search-box">
               <input type="text" id="searchInput" placeholder="Search by name, number, bundle, email..." />
             </div>
@@ -549,10 +563,12 @@
     const passwordInput = document.getElementById("dashboardPassword");
     const passwordError = document.getElementById("passwordError");
     const searchInput = document.getElementById("searchInput");
+    const sortSelect = document.getElementById("sortSelect");
     const ordersTableBody = document.getElementById("ordersTableBody");
 
     let allOrders = [];
     let currentFilter = "ready";
+    let currentSort = "newest";
 
     function formatCurrency(value) {
       const number = Number(value || 0);
@@ -667,6 +683,22 @@ Thank you for choosing Ami Data Hub.`
       }
     }
 
+    function sortOrders(orders) {
+      const sorted = [...orders];
+
+      if (currentSort === "newest") {
+        sorted.sort((a, b) => new Date(b.created_at.replace(" ", "T")) - new Date(a.created_at.replace(" ", "T")));
+      } else if (currentSort === "oldest") {
+        sorted.sort((a, b) => new Date(a.created_at.replace(" ", "T")) - new Date(b.created_at.replace(" ", "T")));
+      } else if (currentSort === "highest") {
+        sorted.sort((a, b) => Number(b.amount_paid || 0) - Number(a.amount_paid || 0));
+      } else if (currentSort === "lowest") {
+        sorted.sort((a, b) => Number(a.amount_paid || 0) - Number(b.amount_paid || 0));
+      }
+
+      return sorted;
+    }
+
     function renderOrders(orders) {
       if (!orders.length) {
         ordersTableBody.innerHTML = `
@@ -677,7 +709,9 @@ Thank you for choosing Ami Data Hub.`
         return;
       }
 
-      ordersTableBody.innerHTML = orders.map(order => {
+      const finalOrders = sortOrders(orders);
+
+      ordersTableBody.innerHTML = finalOrders.map(order => {
         const paymentClass = order.payment_status === "success" ? "status-success" : "status-other";
         const fulfillmentClass = order.fulfillment_status === "fulfilled" ? "status-fulfilled" : "status-pending";
         const safeOrder = encodeURIComponent(JSON.stringify(order));
@@ -897,6 +931,11 @@ Thank you for choosing Ami Data Hub.`
     });
 
     searchInput.addEventListener("input", applyFilters);
+
+    sortSelect.addEventListener("change", function() {
+      currentSort = this.value;
+      applyFilters();
+    });
 
     if (sessionStorage.getItem("ami_orders_unlocked") === "true") {
       lockScreen.classList.add("hidden");
