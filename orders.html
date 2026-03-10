@@ -132,8 +132,8 @@
     .panel-head{
       display:flex;
       justify-content:space-between;
-      align-items:center;
-      gap:12px;
+      align-items:flex-start;
+      gap:14px;
       flex-wrap:wrap;
       padding:18px;
       border-bottom:1px solid var(--line);
@@ -147,6 +147,13 @@
       color:var(--muted);
       font-size:14px;
       margin-top:4px;
+    }
+
+    .panel-tools{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
     }
 
     .search-box{
@@ -170,6 +177,28 @@
     .search-box input::placeholder,
     .password-box input::placeholder{
       color:#94a3b8;
+    }
+
+    .filter-tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .filter-tab{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.04);
+      color:white;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .filter-tab.active{
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      border-color:transparent;
     }
 
     .table-wrap{
@@ -424,8 +453,16 @@
             <p>Newest orders appear first.</p>
           </div>
 
-          <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search by name, number, bundle, email..." />
+          <div class="panel-tools">
+            <div class="filter-tabs">
+              <button class="filter-tab active" data-filter="all" onclick="setFilter('all')">All</button>
+              <button class="filter-tab" data-filter="pending" onclick="setFilter('pending')">Pending</button>
+              <button class="filter-tab" data-filter="fulfilled" onclick="setFilter('fulfilled')">Fulfilled</button>
+            </div>
+
+            <div class="search-box">
+              <input type="text" id="searchInput" placeholder="Search by name, number, bundle, email..." />
+            </div>
           </div>
         </div>
 
@@ -456,7 +493,7 @@
       </div>
 
       <div class="note">
-        This dashboard now includes a WhatsApp shortcut for each order. The next strong upgrade after this is filtering by pending only, or adding real backend login protection.
+        You can now switch between All, Pending, and Fulfilled orders. This makes it much easier to focus on orders that still need delivery.
       </div>
     </div>
   </div>
@@ -473,6 +510,7 @@
     const ordersTableBody = document.getElementById("ordersTableBody");
 
     let allOrders = [];
+    let currentFilter = "all";
 
     function formatCurrency(value) {
       const number = Number(value || 0);
@@ -579,33 +617,48 @@ We are working on your order. Thank you.`
       }
     }
 
-    function filterOrders() {
+    function applyFilters() {
       const query = searchInput.value.trim().toLowerCase();
 
-      if (!query) {
-        renderOrders(allOrders);
-        return;
+      let filtered = [...allOrders];
+
+      if (currentFilter === "pending") {
+        filtered = filtered.filter(order => order.fulfillment_status !== "fulfilled");
+      } else if (currentFilter === "fulfilled") {
+        filtered = filtered.filter(order => order.fulfillment_status === "fulfilled");
       }
 
-      const filtered = allOrders.filter(order => {
-        const text = [
-          order.customer_name,
-          order.customer_email,
-          order.recipient_number,
-          order.bundle,
-          order.reference,
-          order.extra_note,
-          order.payment_status,
-          order.fulfillment_status,
-          order.created_at
-        ]
-        .join(" ")
-        .toLowerCase();
+      if (query) {
+        filtered = filtered.filter(order => {
+          const text = [
+            order.customer_name,
+            order.customer_email,
+            order.recipient_number,
+            order.bundle,
+            order.reference,
+            order.extra_note,
+            order.payment_status,
+            order.fulfillment_status,
+            order.created_at
+          ]
+          .join(" ")
+          .toLowerCase();
 
-        return text.includes(query);
-      });
+          return text.includes(query);
+        });
+      }
 
       renderOrders(filtered);
+    }
+
+    function setFilter(filterName) {
+      currentFilter = filterName;
+
+      document.querySelectorAll(".filter-tab").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.filter === filterName);
+      });
+
+      applyFilters();
     }
 
     async function loadOrders() {
@@ -621,7 +674,7 @@ We are working on your order. Thank you.`
 
         if (data.status && Array.isArray(data.orders)) {
           allOrders = data.orders;
-          renderOrders(allOrders);
+          applyFilters();
           return;
         }
 
@@ -699,7 +752,7 @@ We are working on your order. Thank you.`
       }
     });
 
-    searchInput.addEventListener("input", filterOrders);
+    searchInput.addEventListener("input", applyFilters);
 
     if (sessionStorage.getItem("ami_orders_unlocked") === "true") {
       lockScreen.classList.add("hidden");
