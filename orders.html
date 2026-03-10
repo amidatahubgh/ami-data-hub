@@ -493,7 +493,7 @@
       </div>
 
       <div class="note">
-        You can now switch between All, Pending, and Fulfilled orders. This makes it much easier to focus on orders that still need delivery.
+        This dashboard now uses both a page password and an admin token header for backend requests.
       </div>
     </div>
   </div>
@@ -501,6 +501,7 @@
   <script>
     const BACKEND_URL = "https://ami-data-backend.proud-fog-38e9.workers.dev";
     const DASHBOARD_PASSWORD = "Ghanaboy1.";
+    const ADMIN_TOKEN = "AmiOrdersSecure2026!"; // replace with the exact same value you saved in Cloudflare ADMIN_TOKEN
 
     const lockScreen = document.getElementById("lockScreen");
     const dashboardContent = document.getElementById("dashboardContent");
@@ -669,7 +670,12 @@ We are working on your order. Thank you.`
       `;
 
       try {
-        const res = await fetch(`${BACKEND_URL}/orders`);
+        const res = await fetch(`${BACKEND_URL}/orders`, {
+          headers: {
+            "X-Admin-Token": ADMIN_TOKEN
+          }
+        });
+
         const data = await res.json();
 
         if (data.status && Array.isArray(data.orders)) {
@@ -702,7 +708,8 @@ We are working on your order. Thank you.`
         const res = await fetch(`${BACKEND_URL}/update-fulfillment`, {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-Admin-Token": ADMIN_TOKEN
           },
           body: JSON.stringify({
             reference,
