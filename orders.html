@@ -18,6 +18,7 @@
       --danger:#ef4444;
       --warning:#f59e0b;
       --info:#38bdf8;
+      --success:#10b981;
       --card:#111c33;
       --shadow:0 18px 50px rgba(0,0,0,0.28);
       --radius:20px;
@@ -209,7 +210,7 @@
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:1320px;
+      min-width:1420px;
     }
 
     th, td{
@@ -271,7 +272,7 @@
       display:flex;
       flex-direction:column;
       gap:8px;
-      min-width:150px;
+      min-width:170px;
     }
 
     .mini-btn{
@@ -290,6 +291,10 @@
 
     .mini-btn-wa{
       background:linear-gradient(135deg, var(--info), #0284c7);
+    }
+
+    .mini-btn-delivered{
+      background:linear-gradient(135deg, var(--success), #059669);
     }
 
     .mini-btn[disabled]{
@@ -493,7 +498,7 @@
       </div>
 
       <div class="note">
-        This dashboard now uses both a page password and an admin token header for backend requests.
+        This dashboard supports secure backend requests, fulfillment tracking, filters, and WhatsApp shortcuts.
       </div>
     </div>
   </div>
@@ -501,7 +506,7 @@
   <script>
     const BACKEND_URL = "https://ami-data-backend.proud-fog-38e9.workers.dev";
     const DASHBOARD_PASSWORD = "Ghanaboy1.";
-    const ADMIN_TOKEN = "AmiOrdersSecure2026!"; // replace with the exact same value you saved in Cloudflare ADMIN_TOKEN
+    const ADMIN_TOKEN = "AmiOrdersSecure2026!"; // replace with your real Cloudflare ADMIN_TOKEN value
 
     const lockScreen = document.getElementById("lockScreen");
     const dashboardContent = document.getElementById("dashboardContent");
@@ -563,6 +568,27 @@ We are working on your order. Thank you.`
       window.open(`https://wa.me/?text=${message}`, "_blank");
     }
 
+    function openDeliveredMessageForOrder(order) {
+      const customerName = order.customer_name || "Customer";
+      const recipientNumber = order.recipient_number || "Not available";
+      const bundle = order.bundle || "Not available";
+      const reference = order.reference || "Not available";
+
+      const message = encodeURIComponent(
+`Hello ${customerName},
+
+Your Ami Data Hub order has been delivered successfully ✅
+
+Bundle: ${bundle}
+Recipient Number: ${recipientNumber}
+Reference: ${reference}
+
+Thank you for choosing Ami Data Hub.`
+      );
+
+      window.open(`https://wa.me/?text=${message}`, "_blank");
+    }
+
     function renderOrders(orders) {
       if (!orders.length) {
         ordersTableBody.innerHTML = `
@@ -577,11 +603,11 @@ We are working on your order. Thank you.`
       ordersTableBody.innerHTML = orders.map(order => {
         const paymentClass = order.payment_status === "success" ? "status-success" : "status-other";
         const fulfillmentClass = order.fulfillment_status === "fulfilled" ? "status-fulfilled" : "status-pending";
+        const safeOrder = encodeURIComponent(JSON.stringify(order));
+
         const fulfillButton = order.fulfillment_status === "fulfilled"
           ? `<button class="mini-btn mini-btn-fulfill" disabled>Fulfilled</button>`
           : `<button class="mini-btn mini-btn-fulfill" onclick="markFulfilled('${escapeHtml(order.reference || "")}')">Mark Fulfilled</button>`;
-
-        const safeOrder = encodeURIComponent(JSON.stringify(order));
 
         return `
           <tr>
@@ -598,6 +624,7 @@ We are working on your order. Thank you.`
             <td>
               <div class="action-stack">
                 <button class="mini-btn mini-btn-wa" onclick="openWhatsAppFromRow('${safeOrder}')">WhatsApp Customer</button>
+                <button class="mini-btn mini-btn-delivered" onclick="openDeliveredFromRow('${safeOrder}')">Delivered Message</button>
                 ${fulfillButton}
               </div>
             </td>
@@ -615,6 +642,16 @@ We are working on your order. Thank you.`
       } catch (error) {
         console.error("WhatsApp row parse error:", error);
         alert("Could not prepare WhatsApp message.");
+      }
+    }
+
+    function openDeliveredFromRow(encodedOrder) {
+      try {
+        const order = JSON.parse(decodeURIComponent(encodedOrder));
+        openDeliveredMessageForOrder(order);
+      } catch (error) {
+        console.error("Delivered row parse error:", error);
+        alert("Could not prepare delivered message.");
       }
     }
 
